@@ -1,0 +1,12 @@
+!.envs/.production/.postgres
+!.coveragerc
+!.env
+!.pylintrc
+/deploy*
+/Pipfile
+*.pyc
+celerybeat.pid
+README.rst
+setup.cfg
+**/node_modules
+/ampire/frontend/webpack-stats.json

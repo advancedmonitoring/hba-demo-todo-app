@@ -1,0 +1,188 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-10 12:59+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+#: demotodoapp/api_v1/accounts/serializers.py
+msgid "User account is disabled."
+msgstr ""
+
+#: demotodoapp/api_v1/accounts/serializers.py
+msgid "Unable to log in with provided credentials."
+msgstr ""
+
+#: demotodoapp/api_v1/accounts/serializers.py
+msgid "Password"
+msgstr ""
+
+#: demotodoapp/api_v1/accounts/views.py
+msgid "Invalid password"
+msgstr ""
+
+#: demotodoapp/api_v1/accounts/views.py
+msgid "The new password cannot be the same as the old password"
+msgstr ""
+
+#: demotodoapp/api_v1/apps.py
+msgid "API"
+msgstr ""
+
+#: demotodoapp/api_v1/handlers_views.py demotodoapp/ws_v1/consumer.py
+msgid "Request error"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/serializers.py
+msgid "name"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/todos/serializers.py
+msgid "text"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/todos/serializers.py
+msgid "done"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/todos/views.py
+msgid "Create todo error"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/todos/views.py
+msgid "Get todos error"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/todos/views.py demotodoapp/api_v1/notes/views.py
+msgid "Get note error"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/todos/views.py
+msgid "Update todo error"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/todos/views.py
+msgid "Delete todo error"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/views.py
+msgid "Create note error"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/views.py
+msgid "Get notes error"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/views.py
+msgid "Update note error"
+msgstr ""
+
+#: demotodoapp/api_v1/notes/views.py
+msgid "Delete note error"
+msgstr ""
+
+#: demotodoapp/main/apps.py
+msgid "Todos app"
+msgstr ""
+
+#: demotodoapp/main/handlers/notes/create.py
+msgid "Note name too long"
+msgstr ""
+
+#: demotodoapp/main/handlers/todos/create.py
+msgid "Todo text too long"
+msgstr ""
+
+#: demotodoapp/main/handlers/todos/data_handler.py demotodoapp/utils/handler.py
+msgid "Todo not found"
+msgstr ""
+
+#: demotodoapp/main/models.py
+msgid "Author"
+msgstr ""
+
+#: demotodoapp/main/models.py
+msgid "Name"
+msgstr ""
+
+#: demotodoapp/main/models.py
+msgid "Note"
+msgstr ""
+
+#: demotodoapp/main/models.py
+msgid "Notes"
+msgstr ""
+
+#: demotodoapp/main/models.py
+msgid "Text"
+msgstr ""
+
+#: demotodoapp/main/models.py
+msgid "Done"
+msgstr ""
+
+#: demotodoapp/main/models.py
+msgid "Todo"
+msgstr ""
+
+#: demotodoapp/main/models.py
+msgid "Todos"
+msgstr ""
+
+#: demotodoapp/notifications/apps.py
+msgid "Notifications"
+msgstr ""
+
+#: demotodoapp/permissions/apps.py
+msgid "Permissions"
+msgstr ""
+
+#: demotodoapp/permissions/permissions.py
+msgid "User has no permissions to do this"
+msgstr ""
+
+#: demotodoapp/users/apps.py demotodoapp/users/models.py
+msgid "Users"
+msgstr ""
+
+#: demotodoapp/users/models.py
+msgid "Russian"
+msgstr ""
+
+#: demotodoapp/users/models.py
+msgid "English"
+msgstr ""
+
+#: demotodoapp/users/models.py
+msgid "User language"
+msgstr ""
+
+#: demotodoapp/users/models.py
+msgid "User"
+msgstr ""
+
+#: demotodoapp/utils/handler.py
+msgid "Note not found"
+msgstr ""
+
+#: demotodoapp/ws_v1/apps.py
+msgid "Socket app"
+msgstr ""
+
+#: demotodoapp/ws_v1/consumer.py
+msgid "You have no permissions to open note"
+msgstr ""

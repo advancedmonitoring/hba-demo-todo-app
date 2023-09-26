@@ -1,0 +1,13 @@
+[run]
+branch = True
+include = ampire/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin
+
+[report]
+ignore_errors = True
+precision = 2
+
+[html]
+directory = coverage_html_report
