@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from drf_rw_serializers.generics import ListAPIView
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import filters, status
 from rest_framework.pagination import PageNumberPagination
 
@@ -19,13 +19,8 @@ from demotodoapp.main.handlers.todos.update import UpdateTodoHandler
 
 
 @extend_schema(tags=["Todos"])
-class TodosView(HandlerView, ListAPIView):
-    pagination_class = PageNumberPagination
-    pagination_class.page_size_query_param = "limit"
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ["id", "text", "done"]
-
-    @extend_schema(
+@extend_schema_view(
+    post=extend_schema(
         request=WriteAddTodoSerializer,
         responses={
             status.HTTP_201_CREATED: ReadTodoSerializer,
@@ -33,7 +28,22 @@ class TodosView(HandlerView, ListAPIView):
             status.HTTP_401_UNAUTHORIZED: DummyDetailSerializer,
             status.HTTP_403_FORBIDDEN: DummyDetailAndStatusSerializer,
         },
+    ),
+    get=extend_schema(
+        responses={
+            status.HTTP_200_OK: ReadTodoSerializer,
+            status.HTTP_400_BAD_REQUEST: DummyDetailSerializer,
+            status.HTTP_401_UNAUTHORIZED: DummyDetailSerializer,
+            status.HTTP_403_FORBIDDEN: DummyDetailAndStatusSerializer,
+        },
     )
+)
+class TodosView(HandlerView, ListAPIView):
+    pagination_class = PageNumberPagination
+    pagination_class.page_size_query_param = "limit"
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ["id", "text", "done"]
+
     def post(self, request, *args, **kwargs):
         """ Создание задачи """
         self.serializer_class = WriteAddTodoSerializer
@@ -43,21 +53,13 @@ class TodosView(HandlerView, ListAPIView):
         self.handler = CreateTodoHandler
         return self.handle()
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: ReadTodoSerializer,
-            status.HTTP_400_BAD_REQUEST: DummyDetailSerializer,
-            status.HTTP_401_UNAUTHORIZED: DummyDetailSerializer,
-            status.HTTP_403_FORBIDDEN: DummyDetailAndStatusSerializer,
-        },
-    )
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
         """ Получение списка задач из записи """
         self.response_code = status.HTTP_200_OK
         self.handler = GetTodosHandler
         self.read_serializer_class = ReadTodoSerializer
         self.error_text = _("Get todos error")
-        return self.handle()
+        return self.get_handler_result()
 
 
 @extend_schema(tags=["Todos"])

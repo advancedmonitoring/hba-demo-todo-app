@@ -1,5 +1,5 @@
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import filters, status
 
 from demotodoapp.api_v1.handlers_views import HandlerView
@@ -18,14 +18,8 @@ from demotodoapp.main.models import Note
 
 
 @extend_schema(tags=["Notes"])
-class NotesView(HandlerView):
-    queryset = Note.objects.none()  # только для swagger схемы
-    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
-    search_fields = ["name"]
-    ordering_fields = ["id", "name"]
-    ordering = ["id"]
-
-    @extend_schema(
+@extend_schema_view(
+    post=extend_schema(
         request=WriteAddNoteSerializer,
         responses={
             status.HTTP_201_CREATED: ReadNoteSerializer,
@@ -33,7 +27,23 @@ class NotesView(HandlerView):
             status.HTTP_401_UNAUTHORIZED: DummyDetailSerializer,
             status.HTTP_403_FORBIDDEN: DummyDetailAndStatusSerializer,
         },
+    ),
+    get=extend_schema(
+        responses={
+            status.HTTP_200_OK: ReadNoteSerializer(many=True),
+            status.HTTP_400_BAD_REQUEST: DummyDetailSerializer,
+            status.HTTP_401_UNAUTHORIZED: DummyDetailSerializer,
+            status.HTTP_403_FORBIDDEN: DummyDetailAndStatusSerializer,
+        },
     )
+)
+class NotesView(HandlerView):
+    queryset = Note.objects.none()  # только для swagger схемы
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ["name"]
+    ordering_fields = ["id", "name"]
+    ordering = ["id"]
+
     def post(self, request, *args, **kwargs):
         """ Создание записи """
         self.serializer_class = WriteAddNoteSerializer
@@ -43,21 +53,13 @@ class NotesView(HandlerView):
         self.handler = CreateNoteHandler
         return self.handle()
 
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: ReadNoteSerializer(many=True),
-            status.HTTP_400_BAD_REQUEST: DummyDetailSerializer,
-            status.HTTP_401_UNAUTHORIZED: DummyDetailSerializer,
-            status.HTTP_403_FORBIDDEN: DummyDetailAndStatusSerializer,
-        },
-    )
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
         """Получение множества объектов Notes."""
         self.error_text = _("Get notes error")
         self.read_serializer_class = ReadNoteSerializer
         self.response_code = status.HTTP_200_OK
         self.handler = GetNotesHandler
-        return self.handle()
+        return self.get_handler_result()
 
 
 @extend_schema(tags=["Notes"])
