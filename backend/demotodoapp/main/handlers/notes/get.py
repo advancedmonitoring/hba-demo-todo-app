@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 
-from demotodoapp.main.models import Todo, Note
+from demotodoapp.main.models import Note
 from demotodoapp.permissions.decorators import check_permissions, Events
 from demotodoapp.utils.handler import BaseHandler
 from demotodoapp.utils.utils import QueryType

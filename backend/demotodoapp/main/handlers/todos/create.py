@@ -8,13 +8,14 @@ from demotodoapp.main.services.todos.create import CreateTodoService
 from demotodoapp.main.signals.signals import todo_created
 from demotodoapp.permissions.decorators import check_permissions, Events
 from demotodoapp.utils.handler import BaseHandler
+from demotodoapp.utils.handler_validation_mixin import ValidationMixin
 from demotodoapp.utils.service_object import Error, Ok
 from demotodoapp.utils.signal_mixin import SignalMixin
 
 User = get_user_model()
 
 
-class CreateTodoHandler(BaseHandler, SignalMixin):
+class CreateTodoHandler(BaseHandler, SignalMixin, ValidationMixin):
     signal = todo_created
     signal_sender = Todo
 
@@ -22,7 +23,7 @@ class CreateTodoHandler(BaseHandler, SignalMixin):
     def __init__(self, user: User, note: Note, text: str):
         self.user: User = user
         self.note: Note = note
-        self.text: str = self._clean_text(text=text)
+        self.validate(text=text)
 
     def _clean_text(self, text: str) -> str:
         if len(text) > 120:
@@ -34,7 +35,7 @@ class CreateTodoHandler(BaseHandler, SignalMixin):
         service: CreateTodoService = CreateTodoService()
         result: Union[Ok, Error] = service(
             note=self.note,
-            text=self.text,
+            text=self.validated_data.text,
         )
 
         if result.is_error():

@@ -7,9 +7,6 @@ from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
 from django.urls import reverse
 from django.utils.html import format_html
-from rest_framework import status
-from rest_framework.exceptions import NotAuthenticated as NotAuthenticatedDRF, ValidationError as ValidationErrorDRF
-from rest_framework.views import exception_handler
 
 logger = logging.getLogger(__name__)
 
@@ -51,39 +48,6 @@ def get_field_label(field_name, serializer):
         return fields[field_name].label
 
 
-def custom_exception_handler(exc, context):
-    # Вызоваем стандартный обработчик исключений из rest framework,
-    # чтобы получить стандартную ошибку для ответа.
-    response = exception_handler(exc, context)
-
-    # Теперь добавляем в ответ HTTP статус-код
-    if response is not None:
-        response.data["status_code"] = response.status_code
-
-    if isinstance(exc, ValidationErrorDRF):
-        # custom error msg for validation
-        serializer = context["view"].get_serializer_class()
-        first_field_name = first(exc.detail)
-        desc_of_error = exc.detail[first_field_name]
-        if isinstance(desc_of_error, list):
-            label = get_field_label(first_field_name, serializer)
-
-            message = desc_of_error[0].strip(".,:;")
-
-            if label:
-                message = f"{label}: {message}"
-
-            new_response_data = {"detail": message}
-        else:
-            new_response_data = {"detail": desc_of_error}
-        response.data = new_response_data
-
-    if isinstance(exc, NotAuthenticatedDRF):
-        response.status_code = status.HTTP_401_UNAUTHORIZED
-        response.data["status_code"] = status.HTTP_401_UNAUTHORIZED
-    return response
-
-
 def linkify(field_name):
     """
     Преобразует значение внешнего ключа в кликабельные ссылки.
@@ -102,7 +66,7 @@ def linkify(field_name):
             view_name = f"admin:{app_label}_{model_name}_change"
             link_url = reverse(view_name, args=[linked_obj.pk])
             return format_html('<a href="{}">{}</a>', link_url, linked_obj)
-        except Exception: # noqa BLE001
+        except Exception:  # noqa BLE001
             return getattr(obj, field_name)
 
     _linkify.short_description = field_name  # Sets column name
