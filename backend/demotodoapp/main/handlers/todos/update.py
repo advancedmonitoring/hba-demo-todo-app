@@ -1,6 +1,7 @@
 from typing import Union
 
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 
 from demotodoapp.main.handlers.todos.data_handler import TodoDataHandler
 from demotodoapp.main.models import Note, Todo
@@ -26,6 +27,12 @@ class UpdateTodoHandler(BaseHandler, SignalMixin, ValidationMixin):
         self.note: Note = note
         self.todo: Todo = todo
         self.validate(**kwargs)
+
+    def _clean_text(self, text: str) -> str:
+        if len(text) > 120:
+            raise self.exception(_("Todo text too long"))
+
+        return text
 
     def run(self) -> Todo:
         service: UpdateTodoService = UpdateTodoService()

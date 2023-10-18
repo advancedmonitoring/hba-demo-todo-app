@@ -8,20 +8,21 @@ from demotodoapp.main.services.notes.create import CreateNoteService
 from demotodoapp.main.signals.signals import note_created
 from demotodoapp.permissions.decorators import Events, check_permissions
 from demotodoapp.utils.handler import BaseHandler
+from demotodoapp.utils.handler_validation_mixin import ValidationMixin
 from demotodoapp.utils.service_object import Ok, Error
 from demotodoapp.utils.signal_mixin import SignalMixin
 
 User = get_user_model()
 
 
-class CreateNoteHandler(BaseHandler, SignalMixin):
+class CreateNoteHandler(BaseHandler, SignalMixin, ValidationMixin):
     signal = note_created
     signal_sender = Note
 
     @check_permissions(event_code=Events.CREATE_NOTE)
     def __init__(self, user: User, name: str):
         self.user: User = user
-        self.name: str = self._clean_name(name=name)
+        self.validate(name=name)
 
     def _clean_name(self, name: str) -> str:
         if len(name) > 30:
@@ -33,7 +34,7 @@ class CreateNoteHandler(BaseHandler, SignalMixin):
         service: CreateNoteService = CreateNoteService()
         result: Union[Ok, Error] = service(
             author=self.user,
-            name=self.name,
+            name=self.validated_data.name,
         )
 
         if result.is_error():

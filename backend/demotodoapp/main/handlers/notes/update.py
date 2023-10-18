@@ -1,6 +1,7 @@
 from typing import Union
 
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 
 from demotodoapp.main.models import Note
 from demotodoapp.main.services.notes.update import UpdateNoteService
@@ -23,6 +24,12 @@ class UpdateNoteHandler(BaseHandler, SignalMixin, ValidationMixin):
         self.user: User = user
         self.note: Note = note
         self.validate(**kwargs)
+
+    def _clean_name(self, name: str) -> str:
+        if len(name) > 30:
+            raise self.exception(_("Note name too long"))
+
+        return name
 
     def run(self) -> Note:
         service: UpdateNoteService = UpdateNoteService()
