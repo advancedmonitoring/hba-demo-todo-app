@@ -239,7 +239,26 @@ class BaseDataHandler:
 
 
 class HandlerException(Exception):
-    pass
+    def __init__(self,
+                 msg: Optional[str] = None,
+                 field: Optional[str] = None,
+                 errors: Optional[Dict[str, List[str]]] = None):
+
+        assert any([msg, errors]), "Msg or errors required!"
+
+        if msg is None:
+            field_errors: List[str] = next(iter(errors.values()))
+            msg: str = field_errors[0]
+
+        super().__init__(msg)
+        self.msg: str = msg
+        self.field: Optional[str] = field
+
+        if field and errors is None:
+            self.errors = {field: [msg]}
+
+        else:
+            self.errors: Optional[Dict[str, List[str]]] = errors
 
 
 class BaseHandler(metaclass=ABCMeta):
