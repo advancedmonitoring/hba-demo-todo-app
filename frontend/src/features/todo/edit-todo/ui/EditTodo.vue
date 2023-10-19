@@ -9,7 +9,7 @@
       </v-card-title>
 
       <v-card-text>
-        <TodoForm v-model:todo="todo" v-model:isValid="isValid" @submit="save" />
+        <TodoForm ref="todoForm" v-model:todo="todo" v-model:isValid="isValid" @submit="save" />
       </v-card-text>
 
       <v-card-actions>
@@ -40,12 +40,17 @@
   const { getTodoById } = storeToRefs(todoStore)
   const isValid = ref(false)
   const todo = ref(new Todo(getTodoById.value(props.todoId)))
+  const todoForm = ref(null)
 
   const close = () => {
     emits('update:isOpen', false)
   }
 
   const save = () => {
-    TodoApi.updateTodo({ ...todo.value, todoId: props.todoId }).finally(close)
+    TodoApi.updateTodo({ ...todo.value, todoId: props.todoId })
+      .then(close)
+      .catch((e) => {
+        todoForm.value.setErrors(e?.validationErrors || {})
+      })
   }
 </script>

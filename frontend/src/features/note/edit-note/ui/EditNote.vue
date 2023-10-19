@@ -9,7 +9,7 @@
       </v-card-title>
 
       <v-card-text>
-        <NoteForm v-model:note="note" v-model:isValid="isValid" @submit="save" />
+        <NoteForm ref="noteForm" v-model:note="note" v-model:isValid="isValid" @submit="save" />
       </v-card-text>
 
       <v-card-actions>
@@ -39,11 +39,16 @@
   const noteStore = useNotesStore()
   const { getNoteById } = storeToRefs(noteStore)
   const note = ref(new Note(getNoteById.value(props.noteId)))
+  const noteForm = ref(null)
   const isValid = ref(false)
 
   const close = () => emits('update:isOpen', false)
 
   const save = () => {
-    NoteApi.updateNote({ noteId: note.value.id, name: note.value.name }).finally(close)
+    NoteApi.updateNote({ noteId: note.value.id, name: note.value.name })
+      .then(close)
+      .catch((e) => {
+        noteForm.value.setErrors(e?.validationErrors || {})
+      })
   }
 </script>

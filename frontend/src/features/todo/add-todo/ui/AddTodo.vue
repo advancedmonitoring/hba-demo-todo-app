@@ -10,7 +10,7 @@
       </v-card-title>
 
       <v-card-text>
-        <TodoForm v-model:todo="todo" v-model:isValid="isValid" @submit="save" />
+        <TodoForm ref="todoForm" v-model:todo="todo" v-model:isValid="isValid" @submit="save" />
       </v-card-text>
 
       <v-card-actions>
@@ -37,6 +37,7 @@
   const emit = defineEmits(['update:isOpen'])
   const router = useRouter()
   const currentNoteId = ref(router.currentRoute.value.params.noteId)
+  const todoForm = ref(null)
   const todo = ref(
     new Todo({
       noteId: currentNoteId.value,
@@ -51,5 +52,10 @@
   }
   const isValid = ref(false)
 
-  const save = () => TodoApi.createTodo(todo.value).finally(close)
+  const save = () =>
+    TodoApi.createTodo(todo.value)
+      .then(close)
+      .catch((e) => {
+        todoForm.value.setErrors(e?.validationErrors || {})
+      })
 </script>

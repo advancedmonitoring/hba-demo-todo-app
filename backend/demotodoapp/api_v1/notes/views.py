@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from drf_rw_serializers.generics import ListAPIView
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import filters, status
 
@@ -37,7 +38,7 @@ from demotodoapp.main.models import Note
         },
     )
 )
-class NotesView(HandlerView):
+class NotesView(HandlerView, ListAPIView):
     queryset = Note.objects.none()  # только для swagger схемы
     filter_backends = [filters.OrderingFilter, filters.SearchFilter]
     search_fields = ["name"]

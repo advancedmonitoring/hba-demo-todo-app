@@ -38,7 +38,7 @@
     },
   })
 
-  useForm()
+  const { setErrors } = useForm()
   const isValid = useIsFormValid()
   const newTodo = ref(cloneDeep(props.todo))
 
@@ -55,4 +55,8 @@
     },
     { deep: true }
   )
+
+  defineExpose({
+    setErrors,
+  })
 </script>
