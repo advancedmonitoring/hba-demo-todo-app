@@ -8,7 +8,7 @@ class NoteApi {
   }
 
   createNote = ({ name }) => {
-    return transport.sendPost(`${this.appName}/`, { name })
+    return transport.sendPost(`${this.appName}/`, { name }, false)
   }
 
   getNote = ({ noteId }) => {
@@ -16,7 +16,7 @@ class NoteApi {
   }
 
   updateNote = ({ noteId, name }) => {
-    return transport.sendPatch(`${this.appName}/${noteId}/`, { name })
+    return transport.sendPatch(`${this.appName}/${noteId}/`, { name }, false)
   }
 
   deleteNote = ({ noteId }) => {

@@ -10,7 +10,7 @@
       </v-card-title>
 
       <v-card-text>
-        <NoteForm v-model:note="note" v-model:isValid="isValid" @submit="save" />
+        <NoteForm ref="noteForm" v-model:note="note" v-model:isValid="isValid" @submit="save" />
       </v-card-text>
 
       <v-card-actions>
@@ -28,7 +28,7 @@
   import { Note, NoteApi, NoteForm } from '@/entities/note'
 
   import BaseButton from '@/shared/ui/BaseButton'
-
+  const noteForm = ref(null)
   const note = ref(new Note({}))
 
   const isOpenAddModal = ref(false)
@@ -41,5 +41,10 @@
     isOpenAddModal.value = false
   }
 
-  const save = () => NoteApi.createNote(note.value).finally(close)
+  const save = () =>
+    NoteApi.createNote(note.value)
+      .then(close)
+      .catch((e) => {
+        noteForm.value.setErrors(e?.validationErrors || {})
+      })
 </script>

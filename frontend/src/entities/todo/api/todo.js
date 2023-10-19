@@ -8,7 +8,7 @@ class TodoApi {
   }
 
   createTodo = ({ noteId, text }) => {
-    return transport.sendPost(`${this.appName}/${noteId}/todos/`, { text })
+    return transport.sendPost(`${this.appName}/${noteId}/todos/`, { text }, false)
   }
 
   getTodo = ({ noteId, todoId }) => {
@@ -16,7 +16,7 @@ class TodoApi {
   }
 
   updateTodo = ({ todoId, noteId, text, done }) => {
-    return transport.sendPatch(`${this.appName}/${noteId}/todos/${todoId}/`, { text, done })
+    return transport.sendPatch(`${this.appName}/${noteId}/todos/${todoId}/`, { text, done }, false)
   }
 
   deleteTodo = ({ noteId, todoId }) => {

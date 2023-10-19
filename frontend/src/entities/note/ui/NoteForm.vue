@@ -23,7 +23,7 @@
     },
   })
 
-  useForm()
+  const { setErrors } = useForm()
   const newNote = ref(cloneDeep(props.note))
   const isValid = useIsFormValid()
 
@@ -40,4 +40,8 @@
     },
     { deep: true }
   )
+
+  defineExpose({
+    setErrors,
+  })
 </script>
